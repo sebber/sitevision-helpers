@@ -1,0 +1,58 @@
+<snippet>
+  <content><![CDATA[
+/* ** -- API -- ** */
+var utils           = request.getAttribute("sitevision.utils"),
+    session         = request.getAttribute("sitevision.jcr.session"),
+    servletRequest  = request.getServletRequest();
+
+var searchFactory       = utils.getSearchFactory(),
+    portletContextUtil  = utils.getPortletContextUtil(),
+    outputUtil          = utils.getOutputUtil(),
+    trashcanUtil        = utils.getTrashcanUtil(),
+    permissionUtil      = utils.getPermissionUtil(),
+    nodeIteratorUtil    = utils.getNodeIteratorUtil();
+
+/* ** -- Helpers -- ** */
+function getCurrentURL(currentPage) {
+   var pageID = currentPage.getIdentifier();
+   var url = pageID;
+   
+   if(/_sitePage\$/.test(pageID)) {
+      url = url.substring(0, url.indexOf('_sitePage'));
+   }
+   
+   return url +".html";
+}
+
+/* ** -- Some context -- ** */
+var currentPage     = portletContextUtil.getCurrentPage(),
+    currentPortlet  = portletContextUtil.getCurrentPortlet(),
+    currentUser     = portletContextUtil.getCurrentUser(),
+    currentURL      = getCurrentURL(currentPage);
+
+/* ** -- Searcher -- ** */
+var searcherBuilder = searchFactory.getSearcherBuilder(),
+    filterBuilder   = searchFactory.getFilterBuilder(),
+    allInChefsrumExceptRedFilter, nodeSearcher, searchResult
+    approximateCount = 0, exactCount = 0;
+
+allInChefsrumExceptRedFilter = filterBuilder
+  //.addFilterQuery('+path:4.175bf364140f396f28782ebb')
+  .addFilterQuery('-path:3.175bf364140f396f28784906')
+  //.addFilterQuery('-svtype:file')
+  .build();
+
+nodeSearcher = searcherBuilder
+  .setFilter(allInChefsrumExceptRedFilter)
+  .build();
+
+searchResult = nodeSearcher.search('+path:4.175bf364140f396f28782ebb', 10000);
+
+approximateCount = searchResult.getApproximateCount();
+exactCount = searchResult.getExactCount();
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>svjs-searcher</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>
