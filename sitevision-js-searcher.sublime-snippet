@@ -33,17 +33,17 @@ var currentPage     = portletContextUtil.getCurrentPage(),
 /* ** -- Searcher -- ** */
 var searcherBuilder = searchFactory.getSearcherBuilder(),
     filterBuilder   = searchFactory.getFilterBuilder(),
-    allInChefsrumExceptRedFilter, nodeSearcher, searchResult
+    aFilter, nodeSearcher, searchResult
     approximateCount = 0, exactCount = 0;
 
-allInChefsrumExceptRedFilter = filterBuilder
+aFilter = filterBuilder
   //.addFilterQuery('+path:4.175bf364140f396f28782ebb')
   .addFilterQuery('-path:3.175bf364140f396f28784906')
   //.addFilterQuery('-svtype:file')
   .build();
 
 nodeSearcher = searcherBuilder
-  .setFilter(allInChefsrumExceptRedFilter)
+  .setFilter(aFilter)
   .build();
 
 searchResult = nodeSearcher.search('+path:4.175bf364140f396f28782ebb', 10000);
